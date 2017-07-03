@@ -199,7 +199,7 @@
         'touchend': $.proxy(self, '_touchEnd')
     });
     
-    if($.browser.msie){
+    if(navigator.userAgent.match("MSIE")){
       self.element.css('-ms-touch-action', 'none');
     }
 

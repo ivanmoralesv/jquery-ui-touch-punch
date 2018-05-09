@@ -32,10 +32,9 @@
   var mouseProto = $.ui.mouse.prototype,
       _mouseInit = mouseProto._mouseInit,
       _mouseDestroy = mouseProto._mouseDestroy,
-      touchHandled, touchTimer,
+      touchHandled,
       dragIgnoreTime = 150, // When dragging less than 150ms we see it as a tap
-      dragIgnoreDistance = 5, // When dragging less than 10px we see it as a tap unless longer than dragIgnoreTime
-      longTapTime = 750; // LongTap tie in ms
+      dragIgnoreDistance = 5; // When dragging less than 10px we see it as a tap unless longer than dragIgnoreTime
 
   /**
    * Simulate a mouse event based on a corresponding touch event
@@ -112,14 +111,6 @@
 
     // Simulate the mousedown event
     simulateMouseEvent(event, 'mousedown');
-
-    // Start longTap timer
-    touchTimer = setTimeout(function () {
-      if (!self._touchMoved) {
-        event.longTap = true;
-        self._touchEnd(event);
-      }
-    }, longTapTime);
   };
 
   /**
@@ -165,30 +156,21 @@
 
     // If the touch interaction did not move, it should trigger a click
     if (!this._touchMoved) {
+      var currentTime = new Date ();
 
-      // Check if it was a long tap or regular tap
-      if (event.longTap) {
-        // Simulate the right-click event
-        simulateMouseEvent(event, 'contextmenu');
+      // Simulate the click event
+      simulateMouseEvent(event, 'click');
 
-      } else {
-        var currentTime = new Date ();
-
-        // Simulate the click event
-        simulateMouseEvent(event, 'click');
-
-        // If there was a recent click simulate double-click
-        if ((currentTime - this.lastClick) < 400) {
-          simulateMouseEvent(event, 'dblclick');
-        }
-
-        // Save the time of the current click
-        this.lastClick = currentTime;
+      // If there was a recent click simulate double-click
+      if ((currentTime - this.lastClick) < 400) {
+        simulateMouseEvent(event, 'dblclick');
       }
+
+      // Save the time of the current click
+      this.lastClick = currentTime;
     }
 
     // Unset the flag to allow other widgets to inherit the touch event
-    clearTimeout(touchTimer);
     touchHandled = false;
   };
 

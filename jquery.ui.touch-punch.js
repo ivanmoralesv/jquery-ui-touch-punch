@@ -48,16 +48,16 @@
     if (event.originalEvent.touches.length > 1) {
       return;
     }
-    
+
     var touch = event.originalEvent.changedTouches[0],
         simulatedEvent = document.createEvent('MouseEvents');
-    
+
     if ($(touch.target).is("input") || $(touch.target).is("textarea")) {
       event.stopPropagation();
     } else {
       event.preventDefault();
     }
-    
+
     // Initialize the simulated mouse event using the touch event's coordinates
     simulatedEvent.initMouseEvent(
       simulatedType,    // type
@@ -112,7 +112,7 @@
 
     // Simulate the mousedown event
     simulateMouseEvent(event, 'mousedown');
-    
+
     // Start longTap timer
     touchTimer = setTimeout(function () {
       if (!self._touchMoved) {
@@ -176,7 +176,7 @@
         simulateMouseEvent(event, 'click');
       }
     }
-    
+
     // Unset the flag to allow other widgets to inherit the touch event
     clearTimeout(touchTimer);
     touchHandled = false;
@@ -189,7 +189,7 @@
    * original mouse event handling methods.
    */
   mouseProto._mouseInit = function () {
-    
+
     var self = this;
 
     // Delegate the touch handlers to the widget's element
@@ -198,7 +198,7 @@
         'touchmove': $.proxy(self, '_touchMove'),
         'touchend': $.proxy(self, '_touchEnd')
     });
-    
+
     if(navigator.userAgent.match("MSIE")){
       self.element.css('-ms-touch-action', 'none');
     }
@@ -211,7 +211,7 @@
    * Remove the touch event handlers
    */
   mouseProto._mouseDestroy = function () {
-    
+
     var self = this;
 
     // Delegate the touch handlers to the widget's element
@@ -225,4 +225,4 @@
     _mouseDestroy.call(self);
   };
   return $;
-})); 
+}));

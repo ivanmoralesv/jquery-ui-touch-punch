@@ -172,8 +172,18 @@
         simulateMouseEvent(event, 'contextmenu');
 
       } else {
+        var currentTime = new Date ();
+
         // Simulate the click event
         simulateMouseEvent(event, 'click');
+
+        // If there was a recent click simulate double-click
+        if ((currentTime - this.lastClick) < 400) {
+          simulateMouseEvent(event, 'dblclick');
+        }
+
+        // Save the time of the current click
+        this.lastClick = currentTime;
       }
     }
 
